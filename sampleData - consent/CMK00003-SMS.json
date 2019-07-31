@@ -1,0 +1,15 @@
+{
+    "CustomerMK": "CMK00003",
+    "SortKey": "UKI^UK^SMS^09940003001",
+    "SourceMarket": "UKI",
+    "Country": "UK",
+    "ContactType": "SMS",
+    "PhoneNumber": "09940003001",
+    "LineType": "Mobile",
+    "ContactPointCategory": "SMSCategory01",
+    "ConsentStatus": "OptIn",
+    "ConsentDateTime": "2019-07-07T16:33:43",
+    "SourceSystemCode": "CDM",
+    "CreatedOn": "2019-07-07T23:02:00",
+    "UpdatedOn": "2019-07-07T23:02:00"
+}

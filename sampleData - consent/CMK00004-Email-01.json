@@ -1,0 +1,26 @@
+{
+    "CustomerMK": "CMK00004",
+    "SortKey": "UKI^UK^Email^cmk00004_01@test.com",
+    "SourceMarket": "UKI",
+    "Country": "UK",
+    "ContactType": "Email",
+    "Email": "cmk00004_01@test.com",
+    "ConsentStatus": "OptOut",
+    "ConsentDateTime": "2019-07-09T13:33:43",
+    "SourceSystemCode": "CDM",
+    "CreatedOn": "2019-07-09T15:00:00",
+    "UpdatedOn": "2019-07-09T23:00:00"
+}
+
+
+# Posted Consent JSON
+{
+    "CustomerMK": "CMK00004",
+    "SourceMarket": "UKI",
+    "Country": "UK",
+    "ContactType": "Email",
+    "Email": "cmk00004_01@test.com",
+    "ConsentStatus": "OptIn",
+    "ConsentDateTime": "2019-07-11T14:00:01",
+    "SourceSystemCode": "CDM"
+}

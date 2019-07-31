@@ -1,0 +1,252 @@
+{
+  "http://xmlns.tui.com/api/tuigroup/cp/cmf/customer/2.0/customerMasterEvent:customerMasterEvent": ' '
+  {
+    "http://xmlns.tui.com/api/tuigroup/cp/cmf/customer/2.0/customerMasterEvent:customers": ' '
+    {
+      "http://xmlns.tui.com/api/tuigroup/cp/cmf/customer/2.0/customerMasterEvent:customer": ' '
+      {
+        "@Version": "20171026161050",
+        "@CustomerLevel": "Silver",
+        "@xmlns": {
+          "tns": ' '
+          "http://xmlns.tui.com/api/tuigroup/cp/cmf/customer/2.0/customerMasterEvent",
+          ' '
+          "": "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0",
+          "default1": ' '
+          "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0",
+          "xs": ' '
+          "http://www.w3.org/2001/XMLSchema",
+          "xsi": ' '
+          "http://www.w3.org/2001/XMLSchema-instance"
+        },
+        ' '
+        "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:customerId": ' '
+        {
+          "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:masterKey": ' '
+          {
+            "@SystemOwner": "UK",
+            "@System": "CDM",
+            "@Id": "1081841641"
+          },
+          ' '
+          "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:sourceKeys": ' '
+          {
+            "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:key": [
+              {
+                "@SystemOwner": ' '
+                "UK",
+                "@System": "CDM",
+                "@Id": "1081841641"
+              },
+              {
+                "@SystemOwner": "TUIGROUP",
+                ' '
+                "@System": "MDM",
+                "@Id": "59f1fb00e4b09cd83208c0cd"
+              }
+            ]
+          }
+        },
+        ' '
+        "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:owner": ' '
+        {
+          "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:key": {
+            "@SystemOwner": ' '
+            "TUIGROUP",
+            "@System": "CP",
+            "@Id": "UK"
+          },
+          ' '
+          "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:name": "TUI UK & I"
+        },
+        ' '
+        "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:firstName": "Tgbhyrt",
+        ' '
+        "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:lastName": "Aslkjfghgf",
+        ' '
+        "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:gender": "Female",
+        ' '
+        "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:dateOfBirth": ' '
+        "1969-07-13",
+        ' '
+        "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:genderTitle": "Miss",
+        ' '
+        "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:status": "Live",
+        ' '
+        "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:contactPoints": ' '
+        {
+          "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:contactPoint": ' '
+          [
+            {
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:priorityType": "Low",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:qualityLevel": "1",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:contactEmailAddress": ' '
+              {
+                "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:emailCategory": "Not ' 'Specified",
+                "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:emailAddress": ' '
+                {
+                  "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:email": ' '
+                  "consilia.d@sonata-software.com"
+                }
+              },
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:correlationID": ' '
+              "1121069566"
+            },
+            ' '
+            {
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:priorityType": "Low",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:contactAddress": ' '
+              {
+                "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:addressCategory": "Not ' 'Specified",
+                ' '
+                "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:geographicalAddress": ' '
+                {
+                  "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:country": ' '
+                  {
+                    "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:country": "GB",
+                    ' '
+                    "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:isoCode-2la": "GB"
+                  },
+                  ' '
+                  "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:postCode": "LU69TN",
+                  ' '
+                  "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:structuredAddress": ' '
+                  {
+                    "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:buildingNumber": "yujhj",
+                    ' '
+                    "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:street": "hfghtg",
+                    ' '
+                    "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:town": "cvbcvb",
+                    ' '
+                    "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:region": "GB",
+                    ' '
+                    "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:county": "GB"
+                  }
+                }
+              },
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:correlationID": ' '
+              "1121069563"
+            },
+            ' '
+            {
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:priorityType": "Low",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:qualityLevel": "1",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:contactPhoneNumber": ' '
+              {
+                "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:phoneNumberCategory": ' '
+                "Not Specified",
+                ' '
+                "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:unStructuredPhoneNumber": ' '
+                {
+                  "@FormatType": "Standard",
+                  ' '
+                  "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:phoneNumber": ' '
+                  "+449949777019"
+                }
+              },
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:correlationID": ' '
+              "1121069567"
+            },
+            ' '
+            {
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:contactAccount": ' '
+              {
+                "@Type": "TUI Customer Account - Market",
+                ' '
+                "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:id": ' '
+                "consilia.d@sonata-software.com"
+              },
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:correlationID": ' '
+              "consilia.d@sonata-software.com"
+            }
+          ]
+        },
+        ' '
+        "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:consents": ' '
+        {
+          "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:consent": ' '
+          [
+            {
+              "@EffectiveFrom": "2017-10-26",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:type": "Marketing by ' 'Post",
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:consent": "false",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:marketingConsent": ' '
+              {
+                "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:brandName": "TUI",
+                ' '
+                "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:contactPoints": ' '
+                {
+                  "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:correlationID": ' '
+                  "1121069563"
+                }
+              }
+            },
+            {
+              "@EffectiveFrom": "2017-10-26",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:type": "Marketing by ' 'Phone",
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:consent": ' '
+              "false",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:marketingConsent": ' '
+              {
+                "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:brandName": "TUI",
+                ' '
+                "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:contactPoints": ' '
+                {
+                  "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:correlationID": ' '
+                  "1121069567"
+                }
+              }
+            },
+            {
+              "@EffectiveFrom": "2017-10-26",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:type": "Marketing by ' 'Email",
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:consent": "true",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:marketingConsent": ' '
+              {
+                "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:brandName": "TUI",
+                ' '
+                "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:contactPoints": ' '
+                {
+                  "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:correlationID": ' '
+                  "1121069566"
+                }
+              }
+            },
+            {
+              "@EffectiveFrom": "2017-10-26",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:type": "Marketing by ' 'SMS",
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:consent": "false",
+              ' '
+              "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:marketingConsent": ' '
+              {
+                "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:brandName": "TUI",
+                ' '
+                "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0:contactPoints": ' '
+                {
+                  "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0:correlationID": ' '
+                  "1121069567"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

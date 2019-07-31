@@ -1,0 +1,13 @@
+{
+    "CustomerMK": "CMK00001",
+    "SortKey": "UKI^UK^Email^cmk00001_02@test.com",
+    "SourceMarket": "UKI",
+    "Country": "UK",
+    "ContactType": "Email",
+    "Email": "cmk00001_02@test.com",
+    "ConsentStatus": "OptIn",
+    "ConsentDateTime": "2019-07-07T15:33:43",
+    "SourceSystemCode": "CDM",
+    "CreatedOn": "2019-07-07T23:00:00",
+    "UpdatedOn": "2019-07-07T23:00:00"
+}

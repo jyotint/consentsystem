@@ -1,0 +1,47 @@
+{
+    "CustomerMK": "CMK00004",
+    "SortKey": "UKI^UK^Call^08040003004",
+    "SourceMarket": "UKI",
+    "Country": "UK",
+    "ContactType": "Call",
+    "PhoneNumber": "08040003004",
+    "LineType": "Land",
+    "ContactPointCategory": "CallCategory01",
+    "ConsentStatus": "OptIn",
+    "ConsentDateTime": "2019-07-07T16:04:04",
+    "SourceSystemCode": "CDM",
+    "CreatedOn": "2019-07-07T23:04:00",
+    "UpdatedOn": "2019-07-07T23:04:00"
+}
+
+// Query
+TableName = "Consent",
+ExpressionAttributeValues = {
+    ':v1': {
+        'S': 'CMK00003',
+    },
+},
+KeyConditionExpression='CustomerMK = :v1'
+
+TableName=Consent&KeyConditionExpression=CustomerMK = :v1&ExpressionAttributeValues={":v1":{"S":"CMK00003"}}
+TableName=Consent&CustomerMK=CMK00003
+
+// Post
+
+TableName = "Consent",
+ReturnConsumedCapacity = "TOTAL",
+Item = {
+    "CustomerMK": { "S": "CMK00004" },
+    "SortKey": { "S": "UKI^UK^Call^08040003004" },
+    "Region": { "S": "UKI" },
+    "Market": { "S": "UK" },
+    "ChannelType": { "S": "Call" },
+    "PhoneNumber": { "S": "08040003004" },
+    "LineType": { "S": "Land" },
+    "ContactPointCategory": { "S": "CallCategory01" },
+    "ConsentStatus": { "S": "OptIn" },
+    "ConsentDateTime": { "S": "2019-07-07T16:04:04" },
+    "SourceSystemCode": { "S": "CDM" },
+    "CreatedOn": { "S": "2019-07-07T23:04:00" },
+    "UpdatedOn": { "S": "2019-07-07T23:04:00" }
+}

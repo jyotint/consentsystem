@@ -1,0 +1,216 @@
+{
+    "tns:customerMasterEvent": {
+        "@xmlns:tns": "http://xmlns.tui.com/api/tuigroup/cp/cmf/customer/2.0/customerMasterEvent",
+        "@xmlns": "http://xmlns.tui.com/cdm/tuigroup/cp/address/2.0",
+        "@xmlns:default1": "http://xmlns.tui.com/cdm/tuigroup/cp/customer/2.0",
+        "@xmlns:xs": "http://www.w3.org/2001/XMLSchema",
+        "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+        "tns:customers": {
+            "tns:customer": {
+                "@Version": "20180525161050",
+                "@CustomerLevel": "Silver",
+                "default1:customerId": {
+                    "default1:masterKey": {
+                        "@SystemOwner": "UK",
+                        "@System": "CDM",
+                        "@Id": "420000000123"
+                    },
+                    "default1:sourceKeys": {
+                        "default1:key": [
+                            {
+                                "@SystemOwner": "UK",
+                                "@System": "CDM",
+                                "@Id": "420000000123"
+                            },
+                            {
+                                "@SystemOwner": "TUIGROUP",
+                                "@System": "MDM",
+                                "@Id": "59f1fb00e4b09cd83208c0cd"
+                            }
+                        ]
+                    }
+                },
+                "default1:owner": {
+                    "default1:key": {
+                        "@SystemOwner": "TUIGROUP",
+                        "@System": "CP",
+                        "@Id": "UK"
+                    },
+                    "default1:name": "TUI UK & I"
+                },
+                "default1:firstName": "Vasudevz123",
+                "default1:initials": "L123",
+                "default1:lastName": "Renjalaz123",
+                "default1:gender": "Male",
+                "default1:dateOfBirth": "1975-09-25",
+                "default1:genderTitle": "Mr",
+                "default1:nationality": "Indian",
+                "default1:maritalStatus": "Married",
+                "default1:status": "Live",
+                "default1:contactPoints": {
+                    "default1:contactPoint": [
+                        {
+                            "priorityType": "Low",
+                            "qualityLevel": "1",
+                            "contactEmailAddress": {
+                                "emailCategory": "Not Specified",
+                                "emailAddress": {
+                                    "email": "23vasudevr1@harman.com"
+                                }
+                            },
+                            "correlationID": "1121069566"
+                        },
+                        {
+                            "priorityType": "Low",
+                            "contactAddress": {
+                                "addressCategory": "Not Specified",
+                                "geographicalAddress": {
+                                    "country": {
+                                        "country": "GB",
+                                        "isoCode-2la": "GB"
+                                    },
+                                    "postCode": "LU69TN",
+                                    "structuredAddress": {
+                                        "buildingNumber": "buildharmanq123",
+                                        "street": "Pearl Street  hamanq1",
+                                        "town": "Londonb",
+                                        "region": "lutonb",
+                                        "county": "lutona"
+                                    }
+                                }
+                            },
+                            "correlationID": "460000000123"
+                        },
+                        {
+                            "priorityType": "Low",
+                            "qualityLevel": "1",
+                            "contactPhoneNumber": {
+                                "phoneNumberCategory": "Not Specified",
+                                "unStructuredPhoneNumber": {
+                                    "@FormatType": "Standard",
+                                    "phoneNumber": "430000000123"
+                                }
+                            },
+                            "correlationID": "430000000123"
+                        },
+                        {
+                            "priorityType": "Low",
+                            "qualityLevel": "1",
+                            "contactPhoneNumber": {
+                                "lineType": "Mobile",
+                                "phoneNumberCategory": "Not Specified",
+                                "unStructuredPhoneNumber": {
+                                    "@FormatType": "Standard",
+                                    "phoneNumber": "440000000123"
+                                }
+                            },
+                            "correlationID": "440000000123"
+                        },
+                        {
+                            "priorityType": "Low",
+                            "qualityLevel": "1",
+                            "contactPhoneNumber": {
+                                "lineType": "Landline",
+                                "phoneNumberCategory": "Not  Specified",
+                                "unStructuredPhoneNumber": {
+                                    "@FormatType": "Standard",
+                                    "phoneNumber": "450000000123"
+                                }
+                            },
+                            "correlationID": "450000000123"
+                        },
+                        {
+                            "contactAccount": {
+                                "@Type": "TUI Customer Account - Market",
+                                "id": "23vasudevr1@harman.com"
+                            },
+                            "correlationID": "23vasudevr1@harman.com"
+                        }
+                    ]
+                },
+                "default1:consents": {
+                    "default1:consent": [
+                        {
+                            "@EffectiveFrom": "2018-10-21",
+                            "default1:type": "Marketing by Post",
+                            "default1:consent": "true",
+                            "default1:marketingConsent": {
+                                "default1:brandName": "TUI",
+                                "default1:contactPoints": {
+                                    "correlationID": "460000000123"
+                                }
+                            }
+                        },
+                        {
+                            "@EffectiveFrom": "2018-10-21",
+                            "default1:type": "Marketing by Phone",
+                            "default1:consent": "true",
+                            "default1:marketingConsent": {
+                                "default1:brandName": "TUI",
+                                "default1:contactPoints": {
+                                    "correlationID": "430000000123"
+                                }
+                            }
+                        },
+                        {
+                            "@EffectiveFrom": "2018-10-21",
+                            "default1:type": "Marketing by Phone",
+                            "default1:consent": "true",
+                            "default1:marketingConsent": {
+                                "default1:brandName": "TUI",
+                                "default1:contactPoints": {
+                                    "correlationID": "440000000123"
+                                }
+                            }
+                        },
+                        {
+                            "@EffectiveFrom": "2018-10-21",
+                            "default1:type": "Marketing by Phone",
+                            "default1:consent": "true",
+                            "default1:marketingConsent": {
+                                "default1:brandName": "TUI",
+                                "default1:contactPoints": {
+                                    "correlationID": "450000000123"
+                                }
+                            }
+                        },
+                        {
+                            "@EffectiveFrom": "2018-10-21",
+                            "default1:type": "Marketing by Email",
+                            "default1:consent": "true",
+                            "default1:marketingConsent": {
+                                "default1:brandName": "TUI",
+                                "default1:contactPoints": {
+                                    "correlationID": "1121069566"
+                                }
+                            }
+                        },
+                        {
+                            "@EffectiveFrom": "2018-10-21",
+                            "default1:type": "Marketing by SMS",
+                            "default1:consent": "true",
+                            "default1:marketingConsent": {
+                                "default1:brandName": "TUI",
+                                "default1:contactPoints": {
+                                    "correlationID": "430000000123"
+                                }
+                            }
+                        },
+                        {
+                            "@EffectiveFrom": "2018-10-21",
+                            "default1:type": "Marketing by SMS",
+                            "default1:consent": "true",
+                            "default1:marketingConsent": {
+                                "default1:brandName": "TUI",
+                                "default1:contactPoints": {
+                                    "correlationID": "440000000123"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "fileName": "Test.xml"
+    }
+}
