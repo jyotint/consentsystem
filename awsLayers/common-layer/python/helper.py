@@ -1,33 +1,39 @@
 # Standard library imports
-import time
+import json
 # Third party library imports
 # Local application imports
 import constants
 
 
-def getUtcDateTime():
-    return time.gmtime()
+def encodeStringToBytes(data, encoding='utf-8'):
+    return bytes(data, encoding=encoding)
 
-def getCurrentUtcDateTime():
-    return convertDateTimeToString(time.gmtime())
+def decodeBytesToString(data, encoding='utf-8'):
+    return data.decode(encoding=encoding)
 
-def convertDateTimeToString(datetime):
-    return time.strftime(constants.DATETIME_STRING_FORMAT, datetime)
 
-def convertStringToDateTime(datetimeString):
-    return time.strptime(datetimeString, constants.DATETIME_STRING_FORMAT)
+def convertObjectToJson(obj, indent=None):
+    """
+    Serialize obj to a JSON formatted str.
+    """
+    return json.dumps(obj, indent=indent)
+
+def convertDataToObject(data):
+    """
+    Deserialize data (a str, bytes or bytearray instance containing a JSON document) to a Python object.
+    """
+    return json.loads(data)
 
 
 def MergeDictionaries(dict1, dict2):
     """
-    Merges two dictionaries and return a new dictinary
-    Python code to merge dict using a single expression
+    Merges two dictionaries and return a new dictinary (Python code to merge dict using a single expression)
     """
     return {**dict1, **dict2}
 
 
-def getTraceDict(originId=None, localId=None, status=None, startDateTime=None, endDateTime=None):
-    dataDict = []
+def getTraceDict(originId=None, localId=None, status=None, message=None, startDateTime=None, endDateTime=None, duration=None):
+    dataDict = {}
     traceAttr = constants.TRACE.ATTRIBUTE
     
     if(originId != None):
@@ -36,11 +42,13 @@ def getTraceDict(originId=None, localId=None, status=None, startDateTime=None, e
         dataDict[traceAttr.LOCAL_ID] = localId
     if(status != None):
         dataDict[traceAttr.STATUS] = status
+    if(message != None):
+        dataDict[traceAttr.MESSAGE] = message
     if(startDateTime != None):
-        dataDict[traceAttr.START_DATETIME] = convertDateTimeToString(startDateTime)
+        dataDict[traceAttr.START_DATETIME] = startDateTime
     if(endDateTime != None):
-        dataDict[traceAttr.END_DATETIME] = convertDateTimeToString(endDateTime)
+        dataDict[traceAttr.END_DATETIME] = endDateTime
     if(startDateTime != None and endDateTime != None):
-        dataDict[traceAttr.DURATION_IN_MS] = endDateTime - startDateTime
+        dataDict[traceAttr.DURATION] = duration
     
     return dataDict

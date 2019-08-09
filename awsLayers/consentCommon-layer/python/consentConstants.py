@@ -19,8 +19,8 @@ class CONSENT_DB:
             CONSENT_DATETIME = "ConsentDateTime"
         CONTACT_TYPE_LIST = ["Email", "Call", "SMS", "Postal"]
 
-    class CONSENT_PROCESS_STREAM:
-        TABLE_NAME = "CustomerConsent.ProcessStream"
+    class CONSENT_JSON_STREAM:
+        TABLE_NAME = "CustomerConsent.ConsentJsonStream"
         class ATTRIBUTE:
             CUSTOMER_MK = "CustomerMK"
             SORT_KEY = "SortKey"

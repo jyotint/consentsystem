@@ -1,0 +1,34 @@
+------------------------------------------------------------------------------------------------------------------------------------
+aws kinesis list-streams
+aws kinesis describe-stream --stream-name ConsentJson
+
+aws kinesis list-stream-consumers --stream-arn "arn:aws:kinesis:us-east-1:490462160022:stream/ConsentJson"
+
+aws kinesis put-record --stream-name ConsentJson --partition-key CustomerCMK00010 --data="{ 'CustomerMK': 'CMK00010',     'SourceMarket': 'UKI',     'Country': 'UK',     'ContactType': 'Call',     'PhoneNumber': '08040003001',     'LineType': 'Land',     'ContactPointCategory': 'CallCategory0010',     'ConsentStatus': 'OptIn',     'ConsentDateTime': '2019-07-14T18:00:01',     'SourceSystemCode': 'CDM' }"
+
+aws kinesis get-shard-iterator --shard-id shardId-000000000000 --shard-iterator-type TRIM_HORIZON --stream-name ConsentJson
+aws kinesis get-records --shard-iterator "<shard-iterator>"
+
+λ aws kinesis put-record --stream-name ConsentJson --partition-key CustomerCMK00010 --data="{ 'CustomerMK': 'CMK00010',     'SourceMarket': 'UKI',     'Country': 'UK',     'ContactType': 'Call',     'PhoneNumber': '08040003001',     'LineType': 'Land',     'ContactPointCategory': 'CallCategory0010',     'ConsentStatus': 'OptIn',     'ConsentDateTime': '2019-07-14T18:00:01',     'SourceSystemCode': 'CDM' }"                                                                   
+{
+    "ShardId": "shardId-000000000000",
+    "SequenceNumber": "49598190886470322223333321721910727882038066149570117634"
+}
+
+# Following command does not work with json.loads() as this API expects property name with double quotes
+#   [ERROR] JSONDecodeError: Expecting property name enclosed in double quotes
+aws kinesis put-record --stream-name ConsentJson --partition-key CustomerCMK00010 --data="{ 'CustomerMK': 'CMK00010', 'SourceMarket': 'UKI', 'Country': 'UK', 'ContactType': 'Call', 'PhoneNumber': '08040003001', 'LineType': 'Land', 'ContactPointCategory': 'CallCategory0010', 'ConsentStatus': 'OptIn', 'ConsentDateTime': '2019-07-14T18:00:01', 'SourceSystemCode': 'CDM' }"
+
+aws kinesis put-record --stream-name ConsentJson --partition-key CustomerCMK00030 --data="{ \"CustomerMK\": \"CMK00030\", \"SourceMarket\": \"UKI\", \"Country\": \"UK\", \"ContactType\": \"Call\", \"PhoneNumber\": \"08040003030\", \"LineType\": \"Land\", \"ContactPointCategory\": \"CallCategory0030\", \"ConsentStatus\": \"OptIn\", \"ConsentDateTime\": \"2019-07-14T18:00:01\", \"SourceSystemCode\": \"CDM\" }"
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+aws firehose put-record --delivery-stream-name ConsentJsonFirehose --record file://CMK00015-Email-01-Firehose.json
+
+λ aws firehose put-record --delivery-stream-name ConsentJsonFirehose --record file://CMK00015-Email-01-Firehose.json                                                                                                                          
+{
+    "RecordId": "kYzlYpzjizOJ53N6nzhqPgQwzFRJayhdKSM3hNHJk+wYJ5QuhZqK1TIJNphc1VbKAKWSi1kGbykMCQOxNqqBlWov84G8jkDtniSpuLvZR/GDoVXD/e8Mg9Hukcb1ApjH6CKh0sCKB6+eoVmNF5Cc1vnmpk09PN9Orv4/lekcN26TWIBUi1LRpXXCVFGvrC5fvIxEGeOVPXEbtTy2pJImdYhb99ilWDCn",                                                                                                                                                                                                                                         
+    "Encrypted": false                                                                                                                                                                                                                        
+}
+
+------------------------------------------------------------------------------------------------------------------------------------

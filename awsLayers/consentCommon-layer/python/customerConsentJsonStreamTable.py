@@ -7,11 +7,12 @@ from dynamoDbTableOps import DynamoDbTableOps
 # Module constants and variables
 
 
-class CustomerConsentProcessDataTable(DynamoDbTableOps):
-    TABLE = CONSENT_DB.CONSENT_PROCESS_STREAM
+class CustomerConsentJsonStreamTable(DynamoDbTableOps):
+    TABLE = CONSENT_DB.CONSENT_JSON_STREAM
 
     def __init__(self):
-        super().__init__(TABLE.TABLE_NAME, TABLE.ATTRIBUTE.CUSTOMER_MK, TABLE.ATTRIBUTE.SORT_KEY)
+        table = CustomerConsentJsonStreamTable.TABLE
+        super().__init__(table.TABLE_NAME, table.ATTRIBUTE.CUSTOMER_MK, table.ATTRIBUTE.SORT_KEY)
 
 
     def __del__(self):
@@ -32,7 +33,10 @@ class CustomerConsentProcessDataTable(DynamoDbTableOps):
 
 
     def find(self, queryParamDict = None, customerMK = None, sortKey = None):
-        if(queryParamDict == None):
-            return self.find(customerMK, sortKey)
-        else:
-            return self.find(queryParamDict[self.tablePrimaryKeyName], queryParamDict[self.tableSortKeyName])
+        # print(f"CustomerConsentJsonStreamTable::find() >> PrimaryKeyName: '{self.tablePrimaryKeyName}', SortKeyName: '{self.tableSortKeyName}'")
+        if(queryParamDict != None):
+            customerMK = queryParamDict.get(self.tablePrimaryKeyName)
+            sortKey = queryParamDict.get(self.tableSortKeyName)
+
+        # print(f"CustomerConsentJsonStreamTable::find() >> PrimaryKey Value: '{customerMK}', SortKey Value: '{sortKey}'")
+        return super().find(customerMK, sortKey)

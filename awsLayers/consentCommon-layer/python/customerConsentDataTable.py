@@ -1,6 +1,7 @@
 # Standard library imports
 # Third party library imports
 # Local application imports
+from apiMgmt import API
 from consentConstants import *
 from dynamoDbTableOps import DynamoDbTableOps
 # Module constants and variables
@@ -36,18 +37,75 @@ class CustomerConsentDataTable(DynamoDbTableOps):
         tableAttr = CustomerConsentDataTable.TABLE.ATTRIBUTE
         separator = self.SORT_KEY_SEPARATOR
 
-        sourceMarket = consentDict[tableAttr.SOURCE_MARKET]
-        country = consentDict[tableAttr.COUNTRY]
-        contactType = consentDict[tableAttr.CONTACT_TYPE]
-        contactTypeKey = consentDict[self.contactTypeKeys[contactType]]
+        sourceMarket = consentDict.get(tableAttr.SOURCE_MARKET)
+        country = consentDict.get(tableAttr.COUNTRY)
+        contactType = consentDict.get(tableAttr.CONTACT_TYPE)
+        contactTypeKey = consentDict.get(self.contactTypeKeys.get(contactType))
         sortKey = f"{sourceMarket}{separator}{country}{separator}{contactType}{separator}{contactTypeKey}"    
         
-        print(f"{self.__class__.__name__}::composeSortKey() >> CustomerMK: '{consentDict[self.tablePrimaryKeyName]}', SortKey: '{sortKey}'")
+        # print(f"{self.__class__.__name__}::composeSortKey() >> CustomerMK: '{consentDict[self.tablePrimaryKeyName]}', SortKey: '{sortKey}'")
         return sortKey
 
 
+    def __extract_addAttrIfPresent(self, dataDict, consentDict, attr):
+        if(dataDict.get(attr) != None):
+            consentDict[attr] = dataDict.get(attr)
+
+    def extract(self, dataDict):
+        tableAttr = CustomerConsentDataTable.TABLE.ATTRIBUTE
+        consentDict = {}
+
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.CUSTOMER_MK)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.SORT_KEY)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.SOURCE_MARKET)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.COUNTRY)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.CONTACT_TYPE)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.EMAIL)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.PHONE_NUMBER)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.POSTAL)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.CONSENT_STATUS)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.CONSENT_DATETIME)
+
+        return consentDict
+
+        
+    def __validate_checkAndAddToMissingAttrList(self, consentDict, missingAttrList, attr):
+        if(consentDict.get(attr) == None):
+            missingAttrList.append(attr)
+
+    def validate(self, consentDict):
+        """
+        Validates Consent dictionary for mandatory attributes
+            Method does "not" support Postal Consent attribute check yet
+        """
+        if(consentDict == None):
+            return self.composeResult(API.STATUS_CODE.FAILED, errorMessage="Invalid consent dictionary object (null) passed!")
+
+        missingAttrList = []
+        tableAttr = CustomerConsentDataTable.TABLE.ATTRIBUTE
+        self.__validate_checkAndAddToMissingAttrList(consentDict, missingAttrList, tableAttr.CUSTOMER_MK)
+        self.__validate_checkAndAddToMissingAttrList(consentDict, missingAttrList, tableAttr.SOURCE_MARKET)
+        self.__validate_checkAndAddToMissingAttrList(consentDict, missingAttrList, tableAttr.COUNTRY)
+        self.__validate_checkAndAddToMissingAttrList(consentDict, missingAttrList, tableAttr.CONTACT_TYPE)
+        self.__validate_checkAndAddToMissingAttrList(consentDict, missingAttrList, tableAttr.CONSENT_STATUS)
+        self.__validate_checkAndAddToMissingAttrList(consentDict, missingAttrList, tableAttr.CONSENT_DATETIME)
+
+        contactType = consentDict.get(tableAttr.CONTACT_TYPE)
+        contactTypeKey = self.contactTypeKeys.get(contactType)
+        self.__validate_checkAndAddToMissingAttrList(consentDict, missingAttrList, contactTypeKey)
+
+        if(len(missingAttrList) > 0):
+            errorMessage = f"Consent is missing mandatory attribute(s): {missingAttrList}!"
+            return self.composeResult(API.STATUS_CODE.FAILED, errorMessage=errorMessage)
+
+        return self.composeResult(API.STATUS_CODE.SUCCESS, data=consentDict)
+
+
     def find(self, queryParamDict = None, customerMK = None, sortKey = None):
-        if(queryParamDict == None):
-            return self.find(customerMK, sortKey)
-        else:
-            return self.find(queryParamDict[self.tablePrimaryKeyName], queryParamDict[self.tableSortKeyName])
+        # print(f"CustomerConsentDataTable::find() >> PrimaryKeyName: '{self.tablePrimaryKeyName}', SortKeyName: '{self.tableSortKeyName}'")
+        if(queryParamDict != None):
+            customerMK = queryParamDict.get(self.tablePrimaryKeyName)
+            sortKey = queryParamDict.get(self.tableSortKeyName)
+
+        # print(f"CustomerConsentDataTable::find() >> PrimaryKey Value: '{customerMK}', SortKey Value: '{sortKey}'")
+        return super().find(customerMK, sortKey)

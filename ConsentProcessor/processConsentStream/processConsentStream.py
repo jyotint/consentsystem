@@ -1,97 +1,131 @@
 # Standard library imports
-import base64
 import json
 # Third party library imports
 # Local application imports
 import helper
+import timeHelper
+import lambdaKinesisHelper
 from constants import *
 from apiMgmt import API
-from customerConsentProcessDataTable import CustomerConsentProcessDataTable
+from customerConsentJsonStreamTable import CustomerConsentJsonStreamTable
+import transformConsentJson
 # Module Constants
 
 
 print('Loading function')
 
 
-def addPrimaryAndSortKey(requestDict, dataDict, baseTable, baseTableAttr):
+def addPrimaryAndSortKey(dataDict, baseTableAttr, customerMK, sortKey):
     # Set Primary and Sort Key
-    dataDict[baseTableAttr.CUSTOMER_MK] = requestDict[baseTable.INCOMING_DATA.CUSTOMER_MK] 
-    dataDict[baseTableAttr.SORT_KEY] = helper.getCurrentUtcDateTime()
+    dataDict[baseTableAttr.CUSTOMER_MK] = customerMK
+    dataDict[baseTableAttr.SORT_KEY] = sortKey
 
 
-def transformIncomingJson(requestDict):
-    # TODO
-    # transformedDict = {}
-    transformedDict = API.composeResult(API.STATUS_CODE.SUCCESS, data=requestDict)
-    return transformedDict
+def processRecord(consentJsonStreamTable, requestDict, consentJson):
+    requestId = localId = status = errorMessage = None
 
-
-def processRecord(consentProcessDataTable, requestDict):
-    baseTable = consentProcessDataTable.TABLE
+    baseTable = consentJsonStreamTable.TABLE
     baseTableAttr = baseTable.ATTRIBUTE
+    print(f"CustomerMK: '{baseTable.INCOMING_DATA.CUSTOMER_MK}', requestDict: {requestDict}")
+    customerMK = requestDict[baseTable.INCOMING_DATA.CUSTOMER_MK]
+    sortKey = timeHelper.getUTCDateTimeString()
 
     # ----- INSERT the record -----
     insertRecordDict = {}
     requestId = localId = status = None
     # Tag Start DateTime
-    startDateTime = helper.getUtcDateTime()
+    startTime = timeHelper.getNow()
     # Set Primary and Sort Key
-    addPrimaryAndSortKey(requestDict, insertRecordDict, baseTable, baseTableAttr)
+    addPrimaryAndSortKey(insertRecordDict, baseTableAttr, customerMK, sortKey)
     # Set Original Json
     insertRecordDict[baseTableAttr.ORIGINAL_DATA] = requestDict
-    # Transform and set new Json
-    transformResult = transformIncomingJson(requestDict)
-    if(API.isResultSuccess(transformResult)):
-        insertRecordDict[baseTableAttr.TRANSFORMED_DATA] = API.getResultData(transformResult)
+    valiationResult = transformConsentJson.validate(requestDict, consentJson)
+    if(API.isResultFailure(valiationResult)):
+        status = API.getResultStatus(valiationResult)
+        errorMessage = API.getErrorPrintMessage(valiationResult)
     else:
-        pass
-    # TODO
-    # requestId = localId = None
-    # status = None
+        # Transform and set new Json
+        transformResult = transformConsentJson.transform(requestDict, consentJson)
+        if(API.isResultFailure(transformResult)):
+            status = API.getResultStatus(transformResult)
+            errorMessage = API.getErrorPrintMessage(transformResult)
+        else:
+            insertRecordDict[baseTableAttr.TRANSFORMED_DATA] = API.getResultData(transformResult)
+
     # Set Trace and Stats dictionary
-    insertRecordDict[baseTableAttr.TRACE] = helper.getTraceDict(requestId, localId, status, startDateTime, helper.getUtcDateTime())
-    # Insert into ConsentProcessStream
-    print("processRecord() - insert dictionary: ", insertRecordDict)
-    result = consentProcessDataTable.insert(insertRecordDict)
-    print("  Processing Outcome (insert): ", result)
-    if(API.isResultFailure(result)):
-        # TODO
+    timeLogTuple = timeHelper.getTimeLogTupleString(startTime)
+    # print(f"processRecord() >> timeLogTuple (insert): '{timeLogTuple[0]}', '{timeLogTuple[1]}', '{timeLogTuple[2]}'")
+    insertRecordDict[baseTableAttr.TRACE] = helper.getTraceDict(originId=requestId, localId=localId, status=status, message=errorMessage, startDateTime=timeLogTuple[0], endDateTime=timeLogTuple[1], duration=timeLogTuple[2])
+    # Insert into the table
+    # print("processRecord() >> insert dictionary: ", insertRecordDict)
+    insertResult = consentJsonStreamTable.insert(insertRecordDict)
+    # print("  processRecord() >> Processing Outcome (insert): ", insertResult)
+    if(API.isResultFailure(insertResult)):
+        # TODO What do we do in this scenario?
+        return insertResult if insertResult != None else consentJsonStreamTable.composeResult(API.STATUS_CODE.FAILED)
+    else:
+        # ----- UPDATE the record trace (overall processing time until insert DB operation was successful) -----
+        status = API.getResultStatus(insertResult)
+
+        updateRecordDict = {}
+        addPrimaryAndSortKey(updateRecordDict, baseTableAttr, customerMK, sortKey)
+        # Update the End DateTime
+        timeLogTuple = timeHelper.getTimeLogTupleString(startTime)
+        # print(f"processRecord() >> timeLogTuple (update): '{timeLogTuple[0]}', '{timeLogTuple[1]}', '{timeLogTuple[2]}'")
+        updateRecordDict[baseTableAttr.TRACE] = helper.getTraceDict(originId=requestId, localId=localId, status=status, message=errorMessage, startDateTime=timeLogTuple[0], endDateTime=timeLogTuple[1], duration=timeLogTuple[2])
+        # Update ConsentProcessStream
+        # print("processRecord() >> update dictionary: ", insertRecordDict)
+        updateResult = consentJsonStreamTable.update(updateRecordDict)
+        # print("  processRecord() >> Processing Outcome (update): ", updateResult)
+        # Ignore the update error as insert operation (the key operation) is successful 
+        # if(API.isResultFailure(updateResult)):
+        #     return updateResult if updateResult != None else consentJsonStreamTable.composeResult(API.STATUS_CODE.FAILED)
+
+    # ----- RETURN the insertResult -----
+    return insertResult if insertResult != None else consentJsonStreamTable.composeResult(API.STATUS_CODE.FAILED)
+
+
+def recordHandler(consentJsonStreamTable, record):
+    returnValue = False
+    
+    # try:
+    # Kinesis data is base64 encoded so decode here
+    payload1 = lambdaKinesisHelper.getDecodedPayloadData(record)
+    print(f"recordHandler() >> Decoded payload - type: {type(payload1)}, data: {payload1}")
+    payload2 = payload1.decode("utf-8")
+    print(f"recordHandler() >> Decoded payload2 - type: {type(payload2)}, data: {payload2}")
+    payload3 = json.loads(payload2)
+    print(f"recordHandler() >> Decoded payload3 - type: {type(payload3)}, data: {payload3}")
+    # requestDict = helper.convertDataToObject(payload3)
+    requestDict = json.loads(payload3)
+    print(f"recordHandler() >> Consent Dictionary - Type: {type(requestDict)}, Data: {requestDict}")
+
+    result = processRecord(consentJsonStreamTable, requestDict, payload3)
+    if(API.isResultSuccess(result)):
+        returnValue = True
+    else:
+        # TODO Push this record into "Poison" Queue for manual intervention
         pass
+    returnValue = False
 
-    # ----- UPDATE the record -----
-    updateRecordDict = {}
-    addPrimaryAndSortKey(requestDict, updateRecordDict, baseTable, baseTableAttr)
-    # Update the End DateTime
-    updateRecordDict[baseTableAttr.STATS] = helper.getTraceDict(startDateTime=startDateTime, endDateTime=helper.getUtcDateTime())
-    # Update ConsentProcessStream
-    print("processRecord() - update dictionary: ", insertRecordDict)
-    # TODO
-    # updateResult = consentProcessDataTable.update(updateDict)
-    # print("  Processing Outcome (update): ", updateResult)
-    # if(API.isResultFailure(updateResult)):
-    #    # TODO
-    #     pass
-
-    # ----- RETURN the result -----
-    # TODO Evaluate whether following statement is correct or not
-    return result if result != None else consentProcessDataTable.composeResult(API.STATUS_CODE.FAILED)
+    # except Exception as err:
+    #     print(f"Exception occurred while processing. Type: {type(err)}, str: '{err}'")
+    #     returnValue = False
+    
+    return returnValue
 
 
 def lambda_handler(event, context):
-    # print("Received event: " + json.dumps(event, indent=2))
-    successCount = 0
-    totalCount = 0
-    consentProcessDataTable = CustomerConsentProcessDataTable()
+    # print("lambda_handler() >> Received event: " + helper.convertObjectToJson(event, indent=2))
+    print("context: ", context)
+    successCount = totalCount = 0
 
-    for record in event['Records']:
-        # Kinesis data is base64 encoded so decode here
-        payload = base64.b64decode(record['kinesis']['data'])
-        # print("Decoded payload: ", payload)
-        requestDict = json.loads(payload)
-        # print("Consent Dictionary: ", requestDict)
-        result = processRecord(consentProcessDataTable, requestDict)
-        if(API.isResultSuccess(result)):
+    consentJsonStreamTable = CustomerConsentJsonStreamTable()
+    for record in lambdaKinesisHelper.getEventRecords(event):
+        result = recordHandler(consentJsonStreamTable, record)
+        if(result == True):
             successCount += 1
         totalCount += 1
 
+    # context.succeed()
     return f'Successfully processed {successCount} of {totalCount} records.'

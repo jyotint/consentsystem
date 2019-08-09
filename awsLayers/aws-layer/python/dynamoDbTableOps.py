@@ -3,14 +3,32 @@
 import boto3
 from boto3.dynamodb.conditions import Key
 # Local application imports
-import helper
-from dbConstants import *
-from apiMgmt import *
+import timeHelper
+import dynamoDbHelper
+from apiMgmt import API
 # Module constants and variables
 
 
-class DynamoDbTableOps():
+class DB:
+    DB_RESOURCE_NAME = 'dynamodb'
 
+    class API:
+        class QUERY:
+            KEY_CONDITION_EXPRESSION = "KeyConditionExpression"
+        class RESPONSE:
+            ITEM = "Item"
+            ITEMS = "Items"
+        class RETURN_VALUES:
+            UPDATED_NEW = "UPDATED_NEW"
+
+    class COMMON:
+        SORT_KEY_SEPARATOR = "^"
+        class ATTRIBUTE:
+            CREATED_ON = "CreatedOn"
+            UPDATED_ON = "UpdatedOn"
+
+
+class DynamoDbTableOps():
     def __init__(self, tableName, tablePrimaryKeyName, tableSortKeyName, tableCreateOnKeyName = None, tableUpdatedOnKeyName = None):
         self.SORT_KEY_SEPARATOR = DB.COMMON.SORT_KEY_SEPARATOR
         
@@ -20,7 +38,7 @@ class DynamoDbTableOps():
         
         self.tableCreateOnKeyName = tableCreateOnKeyName if tableCreateOnKeyName != None else DB.COMMON.ATTRIBUTE.CREATED_ON
         self.tableUpdatedOnKeyName = tableUpdatedOnKeyName if tableUpdatedOnKeyName != None else DB.COMMON.ATTRIBUTE.UPDATED_ON
-        
+
         self.dynamoDb = boto3.resource(DB.DB_RESOURCE_NAME)
         self.dbTable = self.dynamoDb.Table(self.tableName)
 
@@ -34,13 +52,35 @@ class DynamoDbTableOps():
     def __str__(self):
         return f"{self.__class__.__name__} >> tableName: '{self.tableName}', tablePrimaryKeyName: '{self.tablePrimaryKeyName}', tableSortKeyName: '{self.tableSortKeyName}', tableCreateOnKeyName: '{self.tableCreateOnKeyName}', tableUpdatedOnKeyName: '{self.tableUpdatedOnKeyName}'"
 
-
-    def composeResult(self, status, data=None, error=None):
-        return API.composeResult(status, data, error)
+    def composeResult(self, status, data=None, error=None, errorMessage=None, errorCode=None):
+        return API.composeResult(status, data, error, errorMessage, errorCode)
 
 
     def composeSortKey(self, dataDict):
+        # Derived class must implement this method
         return None
+
+    def extract(self, dataDict):
+        # Derived class must implement this method
+        return {}
+
+    def validate(self, dataDict):
+        # Derived class must implement this method
+        return self.composeResult(API.STATUS_CODE.FAILED, errorMessage="Derived class must implement this method!")
+
+
+
+    def deserializeRecordToDict(dynamoDbRecord):
+        if(dynamoDbRecord == None):
+            return None
+        deserializer = boto3.dynamodb.types.TypeDeserializer()
+        return {k: deserializer.deserialize(v)  for k, v in dynamoDbRecord.items()}
+
+    def serializeDictToRecord(dataDict):
+        if(dataDict == None):
+            return None
+        serializer = boto3.dynamodb.types.TypeSerializer()
+        return {k: serializer.serialize(v)  for k, v in dataDict.items()}
 
 
     def find(self, primaryKey, sortKey):
@@ -78,16 +118,20 @@ class DynamoDbTableOps():
 
 
     def insert(self, dataDict):
-        currentUtcDateTime = helper.getCurrentUtcDateTime()
+        currentUtcDateTime = timeHelper.getUTCDateTimeString()
         dataDict[self.tableCreateOnKeyName] = currentUtcDateTime
         dataDict[self.tableUpdatedOnKeyName] = currentUtcDateTime
-        # print("dataDict: ", dataDict)
+        print("dynamoDbTableOps::insert() >> dataDict: ", dataDict)
 
-        dataItem = self.dbTable.put_item(Item=dataDict)
-        if(dataItem == None):
+        result = self.dbTable.put_item(Item=dataDict)
+        if(result == None):
             return self.composeResult(API.STATUS_CODE.FAILED, errorMessage="No item was received from the database!")
         else:
-            return self.composeResult(API.STATUS_CODE.SUCCESS, data=dataItem)
+            # print("dynamoDbTableOps::insert() >> returned result: ", result)
+            if(dynamoDbHelper.isOperationSuccessful(result)):
+                return self.composeResult(API.STATUS_CODE.SUCCESS, data=result)
+            else:
+                return self.composeResult(API.STATUS_CODE.FAILED, error=result)
 
 
     def update(self, dataDict):
@@ -95,9 +139,9 @@ class DynamoDbTableOps():
         updateExpression = ""
         expressionAttributeValues = {}
         
-        currentUtcDateTime = helper.getCurrentUtcDateTime()
+        currentUtcDateTime = timeHelper.getUTCDateTimeString()
         dataDict[self.tableUpdatedOnKeyName] = currentUtcDateTime
-        # print("dataDict: ", dataDict)
+        print("dynamoDbTableOps::update() >> request dataDict: ", dataDict)
 
         attributeCount = 1
         for key in dataDict.keys():
@@ -113,17 +157,20 @@ class DynamoDbTableOps():
         if updateExpression != None:
             updateExpression = f"set {updateExpression}"
 
-        dataItem = self.dbTable.update_item(
+        result = self.dbTable.update_item(
             Key = updateKeys,
             UpdateExpression = updateExpression,
             ExpressionAttributeValues = expressionAttributeValues,
             ReturnValues = DB.API.RETURN_VALUES.UPDATED_NEW
         )
-        print("dataItem: ", dataItem)
-        if(dataItem == None):
+        # print("dynamoDbTableOps::update() >> returned result: ", result)
+        if(result == None):
             return self.composeResult(API.STATUS_CODE.FAILED, errorMessage="No item was received from the database!")
         else:
-            return self.composeResult(API.STATUS_CODE.SUCCESS, data=dataItem)
+            if(dynamoDbHelper.isOperationSuccessful(result)):
+                return self.composeResult(API.STATUS_CODE.SUCCESS, data=result)
+            else:
+                return self.composeResult(API.STATUS_CODE.FAILED, error=result)
 
 
     def upsert(self, dataDict):
@@ -133,19 +180,3 @@ class DynamoDbTableOps():
             return self.update(dataDict)
         else:
             return self.insert(dataDict)
-
-
-    def deserializeRecordToDict(dynamoDbRecord):
-        if(dynamoDbRecord == None):
-            return None
-        
-        deserializer = boto3.dynamodb.types.TypeDeserializer()
-        return {k: deserializer.deserialize(v)  for k, v in dynamoDbRecord.items()}
-
-
-    def serializeDictToRecord(dataDict):
-        if(dataDict == None):
-            return None
-
-        serializer = boto3.dynamodb.types.TypeSerializer()
-        return {k: serializer.serialize(v)  for k, v in dataDict.items()}
