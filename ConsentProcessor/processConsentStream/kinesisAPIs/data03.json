@@ -1,0 +1,10 @@
+{
+    "CustomerMK":"13131313131",
+    "SourceMarket": "UKI",
+    "Country": "UK",
+    "ContactType": "Email",
+    "Email":"11axd@test.com",
+    "ConsentStatus":"OptIn",
+    "ConsentDateTime":"2018-05-25T23:59:59",
+    "SourceSystemCode": "CDM"
+}
