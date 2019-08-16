@@ -1,1 +1,1 @@
-{ "CustomerMK": "CMK000031", "SourceMarket": "UKI", "Country": "UK", "ContactType": "Email", "Email": "cmk000031_01@test.com", "ConsentStatus": "OptIn", "ConsentDateTime": "2019-07-21T14:00:01", "SourceSystemCode": "CDM" }
+{ "CustomerMK": "CMK000047", "SourceMarket": "UKI", "Country": "UK", "ContactType": "Call", "PhoneNumber": "08040003047", "LineType": "Land", "ContactPointCategory": "CallCategory01", "ConsentStatus": "OptIn", "ConsentDateTime": "2019-07-07T16:33:43", "SourceSystemCode": "CDM" }

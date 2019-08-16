@@ -65,6 +65,9 @@ class CustomerConsentDataTable(DynamoDbTableOps):
         self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.POSTAL)
         self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.CONSENT_STATUS)
         self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.CONSENT_DATETIME)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.SOURCE_SYSTEM_CODE)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.LINE_TYPE)
+        self.__extract_addAttrIfPresent(dataDict, consentDict, tableAttr.CONTACT_POINT_CATEGORY)
 
         return consentDict
 

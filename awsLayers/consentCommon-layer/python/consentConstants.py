@@ -17,6 +17,9 @@ class CONSENT_DB:
             POSTAL = ""
             CONSENT_STATUS = "ConsentStatus"
             CONSENT_DATETIME = "ConsentDateTime"
+            SOURCE_SYSTEM_CODE = "SourceSystemCode"
+            LINE_TYPE = "LineType"
+            CONTACT_POINT_CATEGORY = "ContactPointCategory"
         CONTACT_TYPE_LIST = ["Email", "Call", "SMS", "Postal"]
 
     class CONSENT_JSON_STREAM:
