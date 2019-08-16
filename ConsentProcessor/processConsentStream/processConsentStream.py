@@ -88,29 +88,32 @@ def processRecord(consentJsonStreamTable, requestDict, consentJson):
 def recordHandler(consentJsonStreamTable, record):
     returnValue = False
     
-    # try:
-    # Kinesis data is base64 encoded so decode here
-    payload1 = lambdaKinesisHelper.getDecodedPayloadData(record)
-    print(f"recordHandler() >> Decoded payload - type: {type(payload1)}, data: {payload1}")
-    payload2 = payload1.decode("utf-8")
-    print(f"recordHandler() >> Decoded payload2 - type: {type(payload2)}, data: {payload2}")
-    payload3 = json.loads(payload2)
-    print(f"recordHandler() >> Decoded payload3 - type: {type(payload3)}, data: {payload3}")
-    # requestDict = helper.convertDataToObject(payload3)
-    requestDict = json.loads(payload3)
-    print(f"recordHandler() >> Consent Dictionary - Type: {type(requestDict)}, Data: {requestDict}")
+    try:
+        # Kinesis data is base64 encoded so decode here
+        payload1 = lambdaKinesisHelper.getDecodedPayloadData(record)
+        print(f"recordHandler() >> Decoded payload - type: {type(payload1)}, data: {payload1}")
+        payload2 = payload1.decode("utf-8")
+        print(f"recordHandler() >> Decoded payload2 - type: {type(payload2)}, data: {payload2}")
+        requestJson = json.loads(payload2)
+        if(type(requestJson) == type({})):
+            requestDict = requestJson
+            requestJson = payload2
+        else:
+            requestDict = json.loads(requestJson)
+            
+        print(f"recordHandler() >> Decoded requestJson - type: {type(requestJson)}, data: {requestJson}")
+        print(f"recordHandler() >> Consent Dictionary - Type: {type(requestDict)}, Data: {requestDict}")
+        result = processRecord(consentJsonStreamTable, requestDict, requestJson)
+        if(API.isResultSuccess(result)):
+            returnValue = True
+        else:
+            # TODO Push this record into "Poison" Queue for manual intervention
+            pass
+        returnValue = False
 
-    result = processRecord(consentJsonStreamTable, requestDict, payload3)
-    if(API.isResultSuccess(result)):
-        returnValue = True
-    else:
-        # TODO Push this record into "Poison" Queue for manual intervention
-        pass
-    returnValue = False
-
-    # except Exception as err:
-    #     print(f"Exception occurred while processing. Type: {type(err)}, str: '{err}'")
-    #     returnValue = False
+    except Exception as err:
+        print(f"Exception occurred while processing. Type: {type(err)}, str: '{err}'")
+        returnValue = False
     
     return returnValue
 
