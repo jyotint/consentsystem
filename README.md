@@ -1,3 +1,3 @@
 # consentsystem
 
-Consent System implmented using Python v3, AWS Kinesis, AWS Lambda, AWS DynamoDB and AWS API Gateway
+Consent System implmented using Python v3 and AWS Services (Kinesis, Lambda, DynamoDB and API Gateway)
